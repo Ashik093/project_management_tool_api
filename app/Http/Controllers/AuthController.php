@@ -50,6 +50,7 @@ class AuthController extends Controller
             }
     
             return response()->json([
+				'data'=>auth()->user(),
                 'token' => auth()->user()->createToken('API Token')->plainTextToken
             ]);
         } catch (\Exception $e) {
@@ -57,13 +58,27 @@ class AuthController extends Controller
         }
         
     }
+	
+	public function me(Request $request)
+    {
+        try {
+			$user = auth()->user();
+            return response()->json([
+				'data'=>$user,
+                'token' => $request->bearerToken()
+            ]);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+        
+    }
 
-    public function logout()
+    public function logout(Request $request)
     {
         try {
             auth()->user()->tokens()->delete();
             return [
-                'message' => 'Tokens Revoked'
+                "message"=>"Logout"
             ];
         } catch (\Exception $e) {
             return $e->getMessage();
