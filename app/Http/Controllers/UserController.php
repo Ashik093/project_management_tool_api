@@ -41,4 +41,13 @@ class UserController extends Controller
         $user->save();
         return UserResource::make($user);
     }
+    public function destroy($id)
+    {
+        $user =User::find($id);
+        if($user->profile_photo !='uploads/images/avatar.png'){
+            unlink($user->profile_photo);
+        }
+        $user->delete();
+        return UserResource::make($user);
+    }
 }
