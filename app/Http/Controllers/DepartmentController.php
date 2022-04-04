@@ -26,6 +26,20 @@ class DepartmentController extends Controller
         $department->save();
         return DepartmentResource::make($department);
     }
+    public function update(Request $request)
+    {
+        $request->merge(array('name'=>strtoupper($request->name),'code' => strtoupper($request->code)));
+        $validated = $request->validate([
+            'code' => 'required',
+            'name' => 'required',
+        ]);
+
+        $department = Department::find($request->id);
+        $department->name = strtoupper($request->name);
+        $department->code = strtoupper($request->code);
+        $department->save();
+        return DepartmentResource::make($department);
+    }
     public function destroy($id)
     {
         $department =Department::find($id);
